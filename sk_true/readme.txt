@@ -1,0 +1,1 @@
+must program with Arduino 1.0.2 unless wifi will cannot use.

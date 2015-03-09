@@ -16,18 +16,22 @@ int CONFIG_DEBUG_MODE = 1;
 int CONFIG_FORCE_COMMAND_PIN = 3;
 
 //  your network SSID (name)
-char CONFIG_WIFI_SSID[] = "mn-wlan";
+//char CONFIG_WIFI_SSID[] = "true_homewifi_3C9";
+char CONFIG_WIFI_SSID[] = "anasjoe";
 // your network password
-char CONFIG_WIFI_PASS[] = "ndit123!@#simple";
+//char CONFIG_WIFI_PASS[] = "000008D7";
+char CONFIG_WIFI_PASS[] = "1234567890";
 // 0: WPA/WPA2
 // 1: WEP
 int CONFIG_WIFI_MODE = 0;
 // your network key Index number (needed only for WEP)
 int CONFIG_WIFI_KEYINDEX = 0;
 
+// the IP address for the shield:
+IPAddress ip(192, 168, 0, 177); 
 
 // Point to Cm Proxy Service IP
-IPAddress CONFIG_CMPROXY_IP(192,168,1,3);
+IPAddress CONFIG_CMPROXY_IP(192,168,43,186);
 //IPAddress CONFIG_CMPROXY_IP(127,0,0,1);
 // Point to Cm Proxy Service port
 // in some case firewall will block the connection 
@@ -50,10 +54,12 @@ int L9 = 9;
 int status = WL_IDLE_STATUS;
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 1L * 1000L; // delay between updates, in milliseconds
+unsigned long postingInterval = 1L * 1000L; // delay between updates, in milliseconds
 
-unsigned long infraredInterval = 0L; // delay between updates, in milliseconds
+unsigned long infraredInterval = 1000L; // delay between updates, in milliseconds
 unsigned long countObstacle = 0; 
+
+//const unsigned long postingInterval = 1L * 1000L; 
 
 // ----------------------------------------------------
 void setup() {
@@ -79,6 +85,8 @@ void setup() {
     // don't continue:
     while (true);
   }
+  
+   //WiFi.config(ip);
 
   String fv = WiFi.firmwareVersion();
   if ( fv != "1.1.0" ){
@@ -141,7 +149,7 @@ void loop() {
         // check infrared
         int infraredState = digitalRead(CONFIG_INFRARED_INPUT_PIN); 
         //if(CONFIG_DEBUG_MODE == 1) Serial.println(infraredState);
-        if(infraredState==LOW)
+        if(infraredState==HIGH)
         {
           if (millis() - lastConnectionTime > infraredInterval) {  
           
@@ -195,7 +203,7 @@ void sendCommand() {
     
     // note the time that the connection was made:
     lastConnectionTime = millis();
-    infraredInterval = 0;
+    //infraredInterval = 0;
     //delay(300);
     //client.stop();
     /*
@@ -207,7 +215,7 @@ void sendCommand() {
         Serial.write("Reply from server: " + c);
     }
     */
-    infraredInterval = 1000L;
+    //infraredInterval = 1000L;
     if(CONFIG_DEBUG_MODE == 1){ 
       Serial.print("sent...");
       Serial.println(CONFIG_CMPROXY_COMMAND);
